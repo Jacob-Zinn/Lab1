@@ -14,36 +14,27 @@ class TodoList: public TodoListInterface {
 public:
 	vector<string> tasks;
     TodoList() {
-		cout << "In constructor"<< endl;
-
  		ifstream infile ("TODOList.txt");
 		string line;
   		if (infile.is_open())
   		{
     		while ( getline (infile,line) )
     		{
-      			cout << line << '\n';
 				tasks.push_back(line);
     		}
    			 infile.close();
   		}
-
   		else {	cout << "Unable to open file";	} 
 		}
 
     virtual ~TodoList() {
-		cout << "In destructor"<< endl;
-
 		ofstream outfile;
 		outfile.open("TODOList.txt", ofstream::out | ofstream::trunc);
 
 		for(int i=0; i< tasks.size(); i++) {
-			//take this out
-			cout << tasks.at(i)<< " ";
 			outfile << tasks[i] << endl;
 		}
 		outfile.close();
-
 	}
 
     /*
@@ -51,7 +42,6 @@ public:
     */
     virtual void add(string _duedate, string _task) 
 	{
-		cout << "In add " << _duedate << " " << _task <<endl;
 		tasks.push_back(_duedate+" "+_task);
 	}
 	
@@ -63,18 +53,9 @@ public:
     */
     virtual int remove(string _task) 
 	{
-		cout << "In remove" <<endl;
-		cout << tasks.size() <<endl;
-		string corner = "corner of mission";
-		cout << corner.find("mission") << "\n\n\n";
-		
-		_task = ""+ _task;
-		cout << _task;
-		for(int i = 0; i < tasks.size(); ++i) {
-			cout << tasks.at(i);
-			if (tasks[i].find(_task) != string::npos) {
+		for(int i = tasks.size() - 1; i >= 0; i--) {
+			if (tasks.at(i).find(_task) != string::npos) {
 				tasks.erase(tasks.begin() + i);
-				cout << "happy"<< "\n\n\n";
 			}
 		}
 	}
@@ -84,9 +65,8 @@ public:
     */
     virtual void printTodoList()
 	{
-		cout << "In list" << endl;
 		for (int i=0; i< tasks.size(); i++) {
-			cout << tasks.[i] << endl;
+			cout << tasks.at(i) << endl;
 		}
 	}
     
@@ -95,11 +75,12 @@ public:
     */
     virtual void printDaysTasks(string _date) 
 	{
-		cout << "In daystracking" << endl;
+		cout << "Tasks for " << _date << ":\n";
 		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.at(i).find(string_date) != string::npos) {
-				
-				cout << string_date << ":\n" << tasks.at(i) << endl;
+			if (tasks.at(i).find(_date) != string::npos) {
+				string justTask;
+				justTask = tasks.at(i).substr(_date.size()+1, tasks.at(i).size() - (_date.size()+1));
+				cout << justTask<<endl;
 			}
 		}
 	}
